@@ -4,7 +4,7 @@ from setuptools import find_packages
 version = '1.0'
 
 name = "collective.portlet.fullview"
-namespace = ['collective', 'portlet', ]
+namespace = ['collective', 'collective.portlet', ]
 baseurl = "http://github.com/collective"
 
 setup(

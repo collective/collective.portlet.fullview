@@ -9,7 +9,7 @@
   <i18n:registerTranslations directory="locales" />
   
   <plone:portlet
-      name       = "portlets.FullView"
+      name       = "collective.portlet.fullview"
       interface  = ".fullview.IFullViewPortlet"
       assignment = ".fullview.Assignment"
       renderer   = ".fullview.Renderer"

@@ -1,10 +1,12 @@
 Changelog
 =========
 
-1.2 (unreleased)
+2.0 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Use the ``RelatedItemsFieldWidget`` from ``plone.app.widgets`` and switch to
+  a ``z3c.form`` based implementation.
+  [thet]
 
 
 1.1 (2015-03-06)

@@ -1,31 +1,33 @@
-from AccessControl.unauthorized import Unauthorized
 from Acquisition import aq_base
 from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from collective.portlet.fullview import msgFact as _
+from plone.app.portlets.browser import z3cformhelper
 from plone.app.portlets.portlets import base
-from plone.app.vocabularies.catalog import SearchableTextSourceBinder
+from plone.app.uuid.utils import uuidToObject
+from plone.app.vocabularies.catalog import CatalogSource
 from plone.memoize.instance import memoize
 from plone.portlets.interfaces import IPortletAssignmentMapping
 from plone.portlets.interfaces import IPortletDataProvider
+from z3c.form import field
 from zope import schema
 from zope.component import getMultiAdapter
-from zope.formlib import form
 from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserView
 
 
 class IFullViewPortlet(IPortletDataProvider):
 
-    content = schema.Choice(
-        title=_(u"Content Item"),
-        source=SearchableTextSourceBinder(
-            {},
-            default_query='path:'
+    content_uid = schema.Choice(
+        title=_(u'label_content_uid', default=u'Content Item'),
+        description=_(
+            u'help_content_uid',
+            default=u'The content object to display in the portlet.'
         ),
-        required=True
+        required=False,
+        source=CatalogSource(),
     )
 
     show_title = schema.Bool(
@@ -60,13 +62,13 @@ class IFullViewPortlet(IPortletDataProvider):
 
 class Assignment(base.Assignment):
     implements(IFullViewPortlet)
-    content = None
+    content_uid = None
     show_title = True
     link_title = True
     show_content = True
 
-    def __init__(self, content, show_title, link_title, show_content):
-        self.content = content
+    def __init__(self, content_uid, show_title, link_title, show_content):
+        self.content_uid = content_uid
         self.show_title = show_title
         self.link_title = link_title
         self.show_content = show_content
@@ -81,16 +83,7 @@ class Renderer(base.Renderer):
 
     @memoize
     def content_obj(self):
-        item = self.data.content
-        if item:
-            portal_url = getToolByName(self.context, 'portal_url')
-            portal_path = portal_url.getPortalPath()
-            try:
-                item = self.context.restrictedTraverse(
-                    '{0}{1}'.format(portal_path, item), None
-                )
-            except Unauthorized:
-                item = None
+        item = uuidToObject(self.data.content_uid)
         return item
 
     def available(self):
@@ -104,22 +97,17 @@ class Renderer(base.Renderer):
     render = ViewPageTemplateFile('fullview.pt')
 
 
-class AddForm(base.AddForm):
-    form_fields = form.Fields(IFullViewPortlet)
+class AddForm(z3cformhelper.AddForm):
+    fields = field.Fields(IFullViewPortlet)
     label = _(u"Add Full View Portlet")
     description = _(u"Show a content item as full view.")
 
     def create(self, data):
-        return Assignment(
-            content=data.get('content', None),
-            show_title=data.get('show_title', True),
-            link_title=data.get('link_title', True),
-            show_content=data.get('show_content', True)
-        )
+        return Assignment(**data)
 
 
-class EditForm(base.EditForm):
-    form_fields = form.Fields(IFullViewPortlet)
+class EditForm(z3cformhelper.EditForm):
+    fields = field.Fields(IFullViewPortlet)
     label = _(u"Edit Full View Portlet")
     description = _(u"Show a content item as full view.")
 

@@ -19,7 +19,7 @@
   <browser:page
       name="fullview_item"
       for="*"
-      class="fullview.FullViewItem"
+      class=".fullview.FullViewItem"
       template="fullview_item.pt"
       layer=".interfaces.IThemeSpecific"
       permission="zope2.View"

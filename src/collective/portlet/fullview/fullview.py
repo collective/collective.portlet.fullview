@@ -75,7 +75,6 @@ class Assignment(base.Assignment):
 
 class Renderer(base.Renderer):
 
-    @property
     @memoize
     def content_obj(self):
         item = self.data.content
@@ -89,18 +88,6 @@ class Renderer(base.Renderer):
             except Unauthorized:
                 item = None
         return item
-
-    @property
-    def title(self):
-        return self.content_obj.title
-
-    @property
-    def url(self):
-        url = None
-        item = self.content_obj
-        if item:
-            url = item.absolute_url()
-        return url
 
     render = ViewPageTemplateFile('fullview.pt')
 

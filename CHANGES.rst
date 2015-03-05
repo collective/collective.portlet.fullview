@@ -4,7 +4,10 @@ Changelog
 1.1 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Only render the fullview portlet, if it's rendered on a context where it is
+  directly assigned. Don't render, if it was derived from a parent context.
+  This avoids infinite loops when a fullview portlets renders a childitem.
+  [thet]
 
 
 1.0 (2015-03-04)

@@ -1,4 +1,6 @@
 from AccessControl.unauthorized import Unauthorized
+from Acquisition import aq_base
+from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -6,8 +8,10 @@ from collective.portlet.fullview import msgFact as _
 from plone.app.portlets.portlets import base
 from plone.app.vocabularies.catalog import SearchableTextSourceBinder
 from plone.memoize.instance import memoize
+from plone.portlets.interfaces import IPortletAssignmentMapping
 from plone.portlets.interfaces import IPortletDataProvider
 from zope import schema
+from zope.component import getMultiAdapter
 from zope.formlib import form
 from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserView
@@ -88,6 +92,14 @@ class Renderer(base.Renderer):
             except Unauthorized:
                 item = None
         return item
+
+    def available(self):
+        assignments = getMultiAdapter(
+            (aq_inner(self.context), self.manager),
+            IPortletAssignmentMapping
+        )
+        assignment = aq_base(self.data)
+        return assignment in assignments.values()
 
     render = ViewPageTemplateFile('fullview.pt')
 

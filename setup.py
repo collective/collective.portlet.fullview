@@ -1,7 +1,7 @@
 from setuptools import setup
 from setuptools import find_packages
 
-version = '1.1'
+version = '1.2.dev0'
 
 name = "collective.portlet.fullview"
 namespace = ['collective', 'collective.portlet', ]

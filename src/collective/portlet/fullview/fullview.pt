@@ -1,4 +1,4 @@
-<tal:block i18n:domain="plone">
+<tal:block i18n:domain="plone" tal:define="content_obj view/content_obj" tal:condition="content_obj">
 <dl class="portlet portletContentProxy">
   <dt class="portletHeader hiddenStructure'">
     <span class="portletTopLeft"></span>
@@ -9,7 +9,7 @@
                   dummy python:request.set('link_title', view.data.link_title);
                   dummy python:request.set('show_content', view.data.show_content)">
 
-    <tal:item tal:define="obj nocall:view/content_obj" tal:replace="structure obj/@@fullview_item" />
+    <tal:item tal:replace="structure content_obj/@@fullview_item" />
 
     <span class="portletBottomLeft"></span>
     <span class="portletBottomRight"></span>

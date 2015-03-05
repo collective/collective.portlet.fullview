@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1 (unreleased)
+1.1 (2015-03-06)
 ----------------
 
 - Only render the fullview portlet, if it's rendered on a context where it is

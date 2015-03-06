@@ -15,6 +15,7 @@ from plone.portlets.interfaces import IPortletDataProvider
 from z3c.form import field
 from zope import schema
 from zope.component import getMultiAdapter
+from zope.component.interfaces import ComponentLookupError
 from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserView
 
@@ -96,10 +97,13 @@ class Renderer(base.Renderer):
         return item
 
     def available(self):
-        assignments = getMultiAdapter(
-            (aq_inner(self.context), self.manager),
-            IPortletAssignmentMapping
-        )
+        try:
+            assignments = getMultiAdapter(
+                (aq_inner(self.context), self.manager),
+                IPortletAssignmentMapping
+            )
+        except ComponentLookupError:
+            return False
         assignment = aq_base(self.data)
         return assignment in assignments.values()
 

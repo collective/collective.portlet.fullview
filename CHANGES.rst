@@ -4,6 +4,10 @@ Changelog
 2.0 (unreleased)
 ----------------
 
+- Return the content object's title for the management screen portlet title to
+  better distinguish several portlets.
+  [thet]
+
 - Use the ``RelatedItemsFieldWidget`` from ``plone.app.widgets`` and switch to
   a ``z3c.form`` based implementation.
   [thet]

@@ -1,6 +1,7 @@
 from Acquisition import aq_base
 from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from collective.portlet.fullview import msgFact as _
@@ -76,7 +77,15 @@ class Assignment(base.Assignment):
     @property
     def title(self):
         """Title of add view in portlet management screen."""
-        return _(u"Full View Portlet")
+        item_title = u""
+        if self.content_uid:
+            item = uuidToObject(self.content_uid)
+            item_title = safe_unicode(item.Title())
+        return u"{0}{1}{2}".format(
+            _(u"Full View Portlet"),
+            " - " if item_title else "",
+            item_title
+        )
 
 
 class Renderer(base.Renderer):

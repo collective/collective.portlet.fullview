@@ -1,5 +1,4 @@
 from Acquisition import aq_base
-from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
@@ -10,7 +9,6 @@ from plone.app.portlets.portlets import base
 from plone.app.uuid.utils import uuidToObject
 from plone.app.vocabularies.catalog import CatalogSource
 from plone.memoize.instance import memoize
-from plone.portlets.interfaces import IPortletAssignmentMapping
 from plone.portlets.interfaces import IPortletDataProvider
 from plone.portlets.interfaces import IPortletManager
 from plone.portlets.interfaces import IPortletRetriever
@@ -19,7 +17,6 @@ from z3c.form import field
 from zope import schema
 from zope.component import getMultiAdapter
 from zope.component import getUtilitiesFor
-from zope.component.interfaces import ComponentLookupError
 from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserView
 

@@ -12,9 +12,13 @@ from plone.app.vocabularies.catalog import CatalogSource
 from plone.memoize.instance import memoize
 from plone.portlets.interfaces import IPortletAssignmentMapping
 from plone.portlets.interfaces import IPortletDataProvider
+from plone.portlets.interfaces import IPortletManager
+from plone.portlets.interfaces import IPortletRetriever
+from plone.portlets.utils import hashPortletInfo
 from z3c.form import field
 from zope import schema
 from zope.component import getMultiAdapter
+from zope.component import getUtilitiesFor
 from zope.component.interfaces import ComponentLookupError
 from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserView
@@ -96,16 +100,34 @@ class Renderer(base.Renderer):
         item = uuidToObject(self.data.content_uid)
         return item
 
-    def available(self):
-        try:
-            assignments = getMultiAdapter(
-                (aq_inner(self.context), self.manager),
-                IPortletAssignmentMapping
-            )
-        except ComponentLookupError:
-            return False
+    def get_portlethash(self):
+        portlethash = None
         assignment = aq_base(self.data)
-        return assignment in assignments.values()
+
+        # Get the portlet info, to get the portlet hash.
+        # THIS IS CRAZY!
+        context = self.context
+        for name, manager in getUtilitiesFor(IPortletManager, context=context):
+            retriever = getMultiAdapter((context, manager), IPortletRetriever)
+            portlets = retriever.getPortlets()
+            for portlet in portlets:
+                if assignment == portlet['assignment']:
+                    # got you
+                    portlet['manager'] = self.manager  # not available in portlet info, yet. hurray.  # noqa
+                    portlethash = hashPortletInfo(portlet)
+        return portlethash
+
+    def available(self):
+        """Only render the portlet once.
+        Avoids infinite recursion, when viewing a derived fullview portlet in
+        the same path as the context which is shown in the fullview portlet is
+        located.
+        """
+        portlethash = self.get_portlethash()
+        if self.request.get('portlet_rendered_{0}'.format(portlethash), False):
+            return False
+        self.request.set('portlet_rendered_{0}'.format(portlethash), True)
+        return True
 
     render = ViewPageTemplateFile('fullview.pt')
 

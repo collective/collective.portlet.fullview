@@ -4,6 +4,11 @@ Changelog
 2.0 (unreleased)
 ----------------
 
+- Allow fullview portlets to be derived while making sure, they don't run into
+  an infinite recursion loop. This is done via annotating the request with the
+  portlet hash.
+  [thet]
+
 - Return the content object's title for the management screen portlet title to
   better distinguish several portlets.
   [thet]

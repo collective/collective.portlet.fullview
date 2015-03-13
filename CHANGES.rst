@@ -4,6 +4,9 @@ Changelog
 2.0 (unreleased)
 ----------------
 
+- Move the content's title into the portlet header.
+  [thet]
+
 - Allow fullview portlets to be derived while making sure, they don't run into
   an infinite recursion loop. This is done via annotating the request with the
   portlet hash.

@@ -1,5 +1,5 @@
 <tal:available condition="view/available">
-<tal:block i18n:domain="plone" define="obj view/content_obj" condition="nocall:obj">
+<tal:block define="obj view/content_obj" condition="nocall:obj">
 <dl class="portlet portletContentProxy">
   <dt class="portletHeader">
     <span class="portletTopLeft"></span>

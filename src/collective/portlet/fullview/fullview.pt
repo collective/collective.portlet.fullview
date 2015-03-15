@@ -1,12 +1,12 @@
 <tal:available condition="view/available">
-<tal:block i18n:domain="plone" define="content_obj view/content_obj" condition="content_obj">
+<tal:block i18n:domain="plone" define="obj view/content_obj" condition="nocall:obj">
 <dl class="portlet portletContentProxy">
   <dt class="portletHeader">
     <span class="portletTopLeft"></span>
       <tal:show_title condition="view/data/show_title">
         <a class="summary url"
           tal:attributes="href context/absolute_url;" tal:omit-tag="not:view/data/link_title">
-          <tal:title replace="content_obj/Title" />
+          <tal:title replace="obj/Title" />
         </a>
       </tal:show_title>
     <span class="portletTopRight"></span>
@@ -15,7 +15,7 @@
       tal:define="dummy python:request.set('show_title', view.data.show_title);
                   dummy python:request.set('show_content', view.data.show_content)">
 
-    <tal:item replace="structure content_obj/@@fullview_item" />
+    <tal:item replace="structure obj/@@fullview_item" />
 
     <span class="portletBottomLeft"></span>
     <span class="portletBottomRight"></span>

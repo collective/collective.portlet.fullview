@@ -1,5 +1,5 @@
 <tal:available condition="view/available">
-<tal:block define="obj view/content_obj" condition="nocall:obj">
+<tal:block define="obj nocall:view/fullview_context" condition="nocall:obj">
 <dl class="portlet portletContentProxy">
   <dt class="portletHeader">
     <span class="portletTopLeft"></span>

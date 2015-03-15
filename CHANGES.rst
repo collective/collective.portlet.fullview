@@ -4,6 +4,10 @@ Changelog
 2.0 (unreleased)
 ----------------
 
+- Don't call the fullview context object unintended in the templates. This had
+  the side effect, of the edit-bar not being rendered.
+  [thet]
+
 - Move the content's title into the portlet header.
   [thet]
 

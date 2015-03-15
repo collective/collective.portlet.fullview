@@ -92,12 +92,15 @@ class Assignment(base.Assignment):
 
 class Renderer(base.Renderer):
 
+    @property
     @memoize
-    def content_obj(self):
+    def fullview_context(self):
         item = uuidToObject(self.data.content_uid)
         return item
 
-    def get_portlethash(self):
+    @property
+    @memoize
+    def portlethash(self):
         portlethash = None
         assignment = aq_base(self.data)
 
@@ -120,7 +123,7 @@ class Renderer(base.Renderer):
         the same path as the context which is shown in the fullview portlet is
         located.
         """
-        portlethash = self.get_portlethash()
+        portlethash = self.portlethash
         if self.request.get('portlet_rendered_{0}'.format(portlethash), False):
             return False
         self.request.set('portlet_rendered_{0}'.format(portlethash), True)

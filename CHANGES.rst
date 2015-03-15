@@ -4,6 +4,9 @@ Changelog
 2.0 (unreleased)
 ----------------
 
+- Rename methods, make them properties, use memoize for portlethash.
+  [thet]
+
 - Don't call the fullview context object unintended in the templates. This had
   the side effect, of the edit-bar not being rendered.
   [thet]

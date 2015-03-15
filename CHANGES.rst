@@ -4,6 +4,9 @@ Changelog
 2.0 (unreleased)
 ----------------
 
+- Fix path to uninstall profiles.
+  [thet]
+
 - Rename methods, make them properties, use memoize for portlethash.
   [thet]
 

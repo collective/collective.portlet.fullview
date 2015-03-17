@@ -11,11 +11,11 @@
       </tal:show_title>
     <span class="portletTopRight"></span>
   </dt>
-  <dd class="portletItem lastItem"
-      tal:define="dummy python:request.set('show_title', view.data.show_title);
-                  dummy python:request.set('show_content', view.data.show_content)">
+  <dd class="portletItem lastItem">
 
-    <tal:item replace="structure obj/@@fullview_item" />
+    <tal:item define="dummy python:request.set('show_title', view.data.show_title);
+                      dummy python:request.set('show_content', view.data.show_content)"
+              replace="structure obj/@@fullview_item" />
 
     <span class="portletBottomLeft"></span>
     <span class="portletBottomRight"></span>

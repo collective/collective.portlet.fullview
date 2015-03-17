@@ -127,6 +127,9 @@ class Renderer(base.Renderer):
         located.
         """
         portlethash = self.portlethash
+        if portlethash is None:
+            return True
+
         if self.request.get('portlet_rendered_{0}'.format(portlethash), False):
             return False
         self.request.set('portlet_rendered_{0}'.format(portlethash), True)

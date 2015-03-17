@@ -4,6 +4,10 @@ Changelog
 2.0 (unreleased)
 ----------------
 
+- Add an ``omit_border`` option to render a div instead of the dl/dt/dd
+  structure.
+  [datakurre]
+
 - Register the ``RelatedItemsFieldWidget`` adapter for this package's browser
   layer to not conflict with the registration provided in ``plone.app.z3cform``
   in Plone 5.

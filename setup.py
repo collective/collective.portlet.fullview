@@ -33,4 +33,9 @@ setup(
         'setuptools',
         'Products.CMFPlone',
     ],
+    entry_points="""
+    # -*- Entry points: -*-
+    [z3c.autoinclude.plugin]
+    target = plone
+    """
 )

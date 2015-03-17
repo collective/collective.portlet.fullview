@@ -4,6 +4,11 @@ Changelog
 2.0 (unreleased)
 ----------------
 
+- Register the ``RelatedItemsFieldWidget`` adapter for this package's browser
+  layer to not conflict with the registration provided in ``plone.app.z3cform``
+  in Plone 5.
+  [thet]
+
 - Skip portlethash check when it's None for minimal support for
   collective.panels.
   [datakurre]

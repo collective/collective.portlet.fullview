@@ -16,7 +16,7 @@
       factory="plone.app.widgets.dx.RelatedItemsFieldWidget"
       for="zope.schema.interfaces.IChoice
            plone.app.vocabularies.catalog.CatalogSource
-           z3c.form.interfaces.IFormLayer" />
+           collective.portlet.fullview.interfaces.IThemeSpecific" />
 
   <plone:portlet
       name       = "collective.portlet.fullview"

@@ -128,6 +128,9 @@ class Renderer(base.Renderer):
         """
         portlethash = self.portlethash
         if portlethash is None:
+            # E.g. for collective.panels, where no portlet hashes are
+            # available. Just return True, as these portlets are not inherited
+            # anyways.
             return True
 
         if self.request.get('portlet_rendered_{0}'.format(portlethash), False):

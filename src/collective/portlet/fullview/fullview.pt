@@ -21,7 +21,7 @@
     <span class="portletBottomRight"></span>
   </dd>
 </dl>
-<div class="portlet portletContentProxy" tal:condition="view/data/omit_border">
+<div class="portletContentProxy" tal:condition="view/data/omit_border">
   <tal:item define="dummy python:request.set('show_title', view.data.show_title);
                     dummy python:request.set('show_content', view.data.show_content)"
             replace="structure obj/@@fullview_item" />

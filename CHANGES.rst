@@ -4,6 +4,19 @@ Changelog
 2.0 (unreleased)
 ----------------
 
+- Skip portlethash check when it's None for minimal support for
+  collective.panels.
+  [datakurre]
+
+- Add setuptools entrypoint for Plone.
+  [datakurre]
+
+- Fix translation of portlet summary.
+  [datakurre]
+
+- Add Finnish localization.
+  [datakurre]
+
 - Fix path to uninstall profiles.
   [thet]
 

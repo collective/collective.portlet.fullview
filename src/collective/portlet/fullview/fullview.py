@@ -17,7 +17,9 @@ from z3c.form import field
 from zope import schema
 from zope.component import getMultiAdapter
 from zope.component import getUtilitiesFor
+from zope.i18n import translate
 from zope.interface import implements
+from zope.globalrequest import getRequest
 from zope.publisher.interfaces.browser import IBrowserView
 
 
@@ -83,8 +85,9 @@ class Assignment(base.Assignment):
         if self.content_uid:
             item = uuidToObject(self.content_uid)
             item_title = safe_unicode(item.Title())
+        request = getRequest()
         return u"{0}{1}{2}".format(
-            _(u"Full View Portlet"),
+            translate(_(u"Full View Portlet"), context=request),
             " - " if item_title else "",
             item_title
         )

@@ -4,6 +4,7 @@ from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from collective.portlet.fullview import msgFact as _
+from collective.portlet.fullview import msgFactPlone as _p
 from plone.app.portlets.browser import z3cformhelper
 from plone.app.portlets.portlets import base
 from plone.app.uuid.utils import uuidToObject
@@ -64,6 +65,14 @@ class IFullViewPortlet(IPortletDataProvider):
         required=False
     )
 
+    omit_border = schema.Bool(
+        title=_p(u"Omit portlet border"),
+        description=_p(u"Tick this box if you want to render the text above "
+                       u"without the standard header, border or footer."),
+        required=False,
+        default=False
+    )
+
 
 class Assignment(base.Assignment):
     implements(IFullViewPortlet)
@@ -71,12 +80,15 @@ class Assignment(base.Assignment):
     show_title = True
     link_title = True
     show_content = True
+    omit_border = False
 
-    def __init__(self, content_uid, show_title, link_title, show_content):
+    def __init__(self, content_uid, show_title, link_title, show_content,
+                 omit_border):
         self.content_uid = content_uid
         self.show_title = show_title
         self.link_title = link_title
         self.show_content = show_content
+        self.omit_border = omit_border
 
     @property
     def title(self):

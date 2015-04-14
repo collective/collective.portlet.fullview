@@ -11,7 +11,7 @@ setup(
     name=name,
     version=version,
     description="Displays a content item as full view",
-    long_description="{0}{1}".format(
+    long_description="{0}\n{1}".format(
         open("README.rst").read(),
         open("CHANGES.rst").read(),
     ),

@@ -32,7 +32,7 @@ class IFullViewPortlet(IPortletDataProvider):
             u'help_content_uid',
             default=u'The content object to display in the portlet.'
         ),
-        required=False,
+        required=True,
         source=CatalogSource(),
     )
 

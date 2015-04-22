@@ -4,6 +4,9 @@ Changelog
 2.0 (unreleased)
 ----------------
 
+- Make the content selection field ``content_uid`` required.
+  [thet]
+
 - Don't fail if the portlet was added but no content item can be found.
   [thet]
 

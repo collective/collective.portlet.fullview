@@ -93,10 +93,11 @@ class Assignment(base.Assignment):
     @property
     def title(self):
         """Title of add view in portlet management screen."""
-        item_title = u""
+        item_title = u"Full View Portlet"
         if self.content_uid:
             item = uuidToObject(self.content_uid)
-            item_title = safe_unicode(item.Title())
+            if item:
+                item_title = safe_unicode(item.Title())
         request = getRequest()
         return u"{0}{1}{2}".format(
             translate(_(u"Full View Portlet"), context=request),

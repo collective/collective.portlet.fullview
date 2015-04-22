@@ -4,6 +4,9 @@ Changelog
 2.0 (unreleased)
 ----------------
 
+- Don't fail if the portlet was added but no content item can be found.
+  [thet]
+
 - Add an ``omit_border`` option to render a div instead of the dl/dt/dd
   structure.
   [datakurre]

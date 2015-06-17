@@ -7,8 +7,10 @@ from collective.portlet.fullview import msgFact as _
 from collective.portlet.fullview import msgFactPlone as _p
 from plone.app.portlets.browser import z3cformhelper
 from plone.app.portlets.portlets import base
+from plone.app.uuid.utils import uuidToCatalogBrain
 from plone.app.uuid.utils import uuidToObject
 from plone.app.vocabularies.catalog import CatalogSource
+from plone.memoize import ram
 from plone.memoize.instance import memoize
 from plone.portlets.interfaces import IPortletDataProvider
 from plone.portlets.interfaces import IPortletManager
@@ -22,6 +24,7 @@ from zope.i18n import translate
 from zope.interface import implements
 from zope.globalrequest import getRequest
 from zope.publisher.interfaces.browser import IBrowserView
+import time
 
 
 class IFullViewPortlet(IPortletDataProvider):
@@ -95,15 +98,27 @@ class Assignment(base.Assignment):
         """Title of add view in portlet management screen."""
         item_title = u"Full View Portlet"
         if self.content_uid:
-            item = uuidToObject(self.content_uid)
+            item = uuidToCatalogBrain(self.content_uid)
             if item:
-                item_title = safe_unicode(item.Title())
+                item_title = safe_unicode(item.Title)
         request = getRequest()
         return u"{0}{1}{2}".format(
             translate(_(u"Full View Portlet"), context=request),
             " - " if item_title else "",
             item_title
         )
+
+
+def _render_cachekey(method, self):
+    timeout = time.time() // (60 * 60)  # cache for 60 min
+    portal_membership = getToolByName(self.context, 'portal_membership')
+    context = self.fullview_context
+    return (
+        '/'.join(context.getPhysicalPath()),
+        context.modification_date.ISO(),
+        portal_membership.getAuthenticatedMember().id,
+        timeout
+    )
 
 
 class Renderer(base.Renderer):
@@ -151,7 +166,11 @@ class Renderer(base.Renderer):
         self.request.set('portlet_rendered_{0}'.format(portlethash), True)
         return True
 
-    render = ViewPageTemplateFile('fullview.pt')
+    @ram.cache(_render_cachekey)
+    def render(self):
+        return self._template()
+
+    _template = ViewPageTemplateFile('fullview.pt')
 
 
 class AddForm(z3cformhelper.AddForm):

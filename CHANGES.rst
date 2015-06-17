@@ -4,6 +4,10 @@ Changelog
 2.0 (unreleased)
 ----------------
 
+- Cache the rendered portlet for an hour with sensible cache keys (user,
+  modification date, path).
+  [thet]
+
 - Make the content selection field ``content_uid`` required.
   [thet]
 

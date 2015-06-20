@@ -110,10 +110,13 @@ class Assignment(base.Assignment):
 
 
 def _render_cachekey(method, self):
+    portlethash = hash(self.data)
+    # portlethash = self.portlethash
     timeout = time.time() // (60 * 60)  # cache for 60 min
     portal_membership = getToolByName(self.context, 'portal_membership')
     context = self.fullview_context
     return (
+        portlethash,
         '/'.join(context.getPhysicalPath()),
         context.modification_date.ISO(),
         portal_membership.getAuthenticatedMember().id,
@@ -144,7 +147,7 @@ class Renderer(base.Renderer):
             for portlet in portlets:
                 if assignment == portlet['assignment']:
                     # got you
-                    portlet['manager'] = self.manager  # not available in portlet info, yet. hurray.  # noqa
+                    portlet['manager'] = self.manager.__name__  # not available in portlet info, yet. hurray.  # noqa
                     portlethash = hashPortletInfo(portlet)
         return portlethash
 

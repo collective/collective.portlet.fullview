@@ -1,4 +1,4 @@
-from Acquisition import aq_base
+from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
@@ -12,13 +12,8 @@ from plone.app.uuid.utils import uuidToObject
 from plone.app.vocabularies.catalog import CatalogSource
 from plone.memoize import ram
 from plone.portlets.interfaces import IPortletDataProvider
-from plone.portlets.interfaces import IPortletManager
-from plone.portlets.interfaces import IPortletRetriever
-from plone.portlets.utils import hashPortletInfo
 from z3c.form import field
 from zope import schema
-from zope.component import getMultiAdapter
-from zope.component import getUtilitiesFor
 from zope.i18n import translate
 from zope.interface import implements
 from zope.globalrequest import getRequest
@@ -93,6 +88,12 @@ class Assignment(base.Assignment):
         self.omit_border = omit_border
 
     @property
+    def portlet_id(self):
+        """Return the portlet assignment's unique object id.
+        """
+        return id(self)
+
+    @property
     def title(self):
         """Title of add view in portlet management screen."""
         item_title = u"Full View Portlet"
@@ -109,15 +110,14 @@ class Assignment(base.Assignment):
 
 
 def _render_cachekey(method, self):
-    portlethash = hash(self.data)
-    # portlethash = self.portlethash
+    context = aq_inner(self.context)
     timeout = time.time() // (60 * 60)  # cache for 60 min
-    portal_membership = getToolByName(self.context, 'portal_membership')
-    context = self.fullview_context
+    portal_membership = getToolByName(context, 'portal_membership')
+    ctx = self.fullview_context
     return (
-        portlethash,
-        '/'.join(context.getPhysicalPath()),
-        context.modification_date.ISO(),
+        self.data.portlet_id,
+        '/'.join(ctx.getPhysicalPath()),
+        ctx.modification_date.ISO(),
         portal_membership.getAuthenticatedMember().id,
         timeout
     )
@@ -130,40 +130,22 @@ class Renderer(base.Renderer):
         item = uuidToObject(self.data.content_uid)
         return item
 
-    @property
-    def portlethash(self):
-        portlethash = None
-        assignment = aq_base(self.data)
-
-        # Get the portlet info, to get the portlet hash.
-        # THIS IS CRAZY!
-        context = self.context
-        for name, manager in getUtilitiesFor(IPortletManager, context=context):
-            retriever = getMultiAdapter((context, manager), IPortletRetriever)
-            portlets = retriever.getPortlets()
-            for portlet in portlets:
-                if assignment == portlet['assignment']:
-                    # got you
-                    portlet['manager'] = self.manager.__name__  # not available in portlet info, yet. hurray.  # noqa
-                    portlethash = hashPortletInfo(portlet)
-        return portlethash
-
     def available(self):
         """Only render the portlet once.
         Avoids infinite recursion, when viewing a derived fullview portlet in
         the same path as the context which is shown in the fullview portlet is
         located.
         """
-        portlethash = self.portlethash
-        if portlethash is None:
+        portlet_id = self.data.portlet_id
+        if portlet_id is None:
             # E.g. for collective.panels, where no portlet hashes are
             # available. Just return True, as these portlets are not inherited
             # anyways.
             return True
 
-        if self.request.get('portlet_rendered_{0}'.format(portlethash), False):
+        if self.request.get('portlet_rendered_{0}'.format(portlet_id), False):
             return False
-        self.request.set('portlet_rendered_{0}'.format(portlethash), True)
+        self.request.set('portlet_rendered_{0}'.format(portlet_id), True)
         return True
 
     @ram.cache(_render_cachekey)

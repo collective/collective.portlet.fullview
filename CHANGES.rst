@@ -4,6 +4,9 @@ Changelog
 2.0 (unreleased)
 ----------------
 
+- Remove plone.memoize instance caches to avoid read on writes.
+  [thet]
+
 - Cache the rendered portlet for an hour with sensible cache keys (portlethash,
   path, modification date, user) for maximum 1 hour.
   [thet]

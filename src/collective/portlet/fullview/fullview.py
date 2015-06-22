@@ -11,7 +11,6 @@ from plone.app.uuid.utils import uuidToCatalogBrain
 from plone.app.uuid.utils import uuidToObject
 from plone.app.vocabularies.catalog import CatalogSource
 from plone.memoize import ram
-from plone.memoize.instance import memoize
 from plone.portlets.interfaces import IPortletDataProvider
 from plone.portlets.interfaces import IPortletManager
 from plone.portlets.interfaces import IPortletRetriever
@@ -127,13 +126,11 @@ def _render_cachekey(method, self):
 class Renderer(base.Renderer):
 
     @property
-    @memoize
     def fullview_context(self):
         item = uuidToObject(self.data.content_uid)
         return item
 
     @property
-    @memoize
     def portlethash(self):
         portlethash = None
         assignment = aq_base(self.data)

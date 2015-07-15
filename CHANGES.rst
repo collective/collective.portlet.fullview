@@ -8,7 +8,7 @@ Changelog
   [thet]
 
 - Cache the rendered portlet for an hour with sensible cache keys (portlet id,
-  path, modification date, user) for maximum 1 hour.
+  path, modification date, user).
   [thet]
 
 - Make the content selection field ``content_uid`` required.
